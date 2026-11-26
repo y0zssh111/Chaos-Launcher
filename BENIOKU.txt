@@ -1,0 +1,23 @@
+CHAOS LAUNCHER v0.4.2 — Windows x64 test sürümü
+Geliştirici: YσZSHI帝 / @y0zshhiii
+
+TEST
+1. Eski launcher, Prism ve Minecraft kapalıyken EXE'yi açın.
+2. Hesabım > Microsoft ile giriş. Resmi Prism Launcher Portable, GitHub'dan otomatik indirilir (yaklaşık 42 MB). İlk Prism kurulum sihirbazı çıkabilir. Hesaplar > Microsoft hesabı ekle üzerinden lisanslı hesabınızı bağlayın. Chaos Launcher şifre veya Microsoft tokenı okumaz. Prism açık kalabilir.
+3. Modlarım > Modları içe aktar. Mevcut CurseForge profilinin mods klasörünü seçin. Mod JAR ve gerekli bağımlılıklar dahil değildir. Eski Chaos verileri ayrı Prism profiline ilk açılışta kopyalanır; orijinal dosyalar silinmez. Tek Chaos JAR bırakın. Önceki 1.2.36-test mixin hatası burada düzeltilmemiştir.
+4. OYNA. Java 21 gerekiyorsa indirilir. Minecraft 1.21.11 / Fabric 0.20.1 başlatma isteği Prism'e --dir ve --launch parametreleri ile gönderilir. İlk oyun indirmeleri Prism üzerinden yapılır. Resmi Minecraft Launcher kullanılmaz. Prism'in kendi penceresi/uyarıları bazı durumlarda görülebilir. OYNA diğer Java veya Prism işlemleri nedeniyle engellenmez. Açık Chaos Prism oturumu mevcut Java ve RAM ayarlarını kullanır. Mod değişikliği için Chaos oyununu ve kendi Prism penceresini kapatın.
+5. Prism ve oyun verileri %LOCALAPPDATA%\TikTokChaosLauncher altında ayrı klasörlerde tutulur. Hesap yönetimi Prism'dedir. Windows'ta GUI ve gerçek hesap/oyun başlatma bu ortamda test edilmedi.
+
+GÜNCELLEMELER (geliştirici yapılandırması)
+- Resmi güncelleme deposu: https://github.com/y0zssh111/Chaos-Launcher. Yayınlar yüklenene kadar güncelleme bulunmaz.
+- Resmi depo kaynak kodunda sabitlenmiştir. Dağıtım sırasında bu adresi değiştirmeyin.
+- GitHub Releases içinde launcher-v0.5.0 tag'li normal release'e TikTokChaosLauncher.exe adlı dosyayı yükleyin. Mod için mod-v1.2.37 gibi ayrı release ve tiktokchaos.jar adlı dosya yükleyin. JAR içindeki fabric.mod.json id=tiktokchaos ve version=1.2.37 olmalı. Sürüm numaraları örnektir. GitHub asset digest SHA-256 ve boyutu zorunludur. Yayınlar ilk 100 release içinden kontrol edilir.
+- Uygulama açılışta otomatik kontrol eder, Güncellemeler sayfasında gösterir; yükleme kullanıcının onayıyla başlar. EXE yanında eski sürüm .backup-* adıyla tutulur, EXE değişimi ayrı yardımcı süreçte yapılır; mod eski JAR'ları mod-backups altında yedekler. Başka modlar veya dünyalar güncellenmez. EXE yedeğini elle geri yüklemek mümkündür. Otomatik sağlık kontrolü ve kriptografik yayıncı imzası henüz yoktur. Windows güncelleme süreci canlı test edilmedi.
+- Prism güncellemeleri bu sürümde otomatik değiştirilmez; ilk kurulum resmi en son stabil portable sürümünü kullanır. Resmi Prism ayrı, değiştirilmemiş uygulamadır. https://github.com/PrismLauncher/PrismLauncher (GPL-3.0; kendi lisansı ve kaynak kodu burada). https://prismlauncher.org/wiki/getting-started/command-line-interface/
+
+YAYINCI
+v0.3.0 doğrulama sunucusu kodu korunmuştur. TikTok sunucusu yayımlanmadan ve Login Kit onayı alınmadan yayıncı doğrulaması/uyarısı çalışmaz. Mod ile kilit entegrasyonu henüz yoktur. Sunucu yapılandırması: TIKTOK_CLIENT_KEY, TIKTOK_CLIENT_SECRET, TIKTOK_REDIRECT_URI, CHAOS_BINDINGS_FILE; TLS reverse proxy kullanın. CHAOS_PUBLISHER_URL ortam değişkeni veya -X main.publisherURL=https://alan-adiniz ile istemciyi yapılandırın. Secret EXE'ye konmaz. Üretim öncesinde veri silme/kurtarma, rate-limit, yedekleme ve güvenlik denetimi gerekir.
+
+DERLEME
+GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -ldflags='-H windowsgui -s -w' -o TikTokChaosLauncher.exe .
+go test ./...
