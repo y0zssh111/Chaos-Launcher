@@ -722,6 +722,7 @@ func main() {
 	if hwnd == 0 {
 		return
 	}
+	finishUpdateCleanup()
 	dark := int32(1)
 	dwm := syscall.NewLazyDLL("dwmapi.dll").NewProc("DwmSetWindowAttribute")
 	if dwm.Find() == nil {
@@ -830,7 +831,7 @@ func main() {
 	button(14, "Güncellemeleri kontrol et", 250, 285, 300, 44)
 	button(15, "Launcher güncelle", 250, 342, 240, 44)
 	button(16, "Modu güncelle", 505, 342, 240, 44)
-	label("GitHub deposu yapılandırıldığında açılışta kontrol edilir.", 250, 410, 680, 25, small, muted)
+	label("GitHub: y0zssh111/Chaos-Launcher • Açılışta kontrol edilir.", 250, 410, 680, 25, small, muted)
 	button(10, "Veri klasörünü aç", 250, 455, 240, 42)
 	switchPage(0)
 	u.NewProc("ShowWindow").Call(hwnd, 5)

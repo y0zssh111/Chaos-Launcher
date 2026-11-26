@@ -1,4 +1,4 @@
-CHAOS LAUNCHER v0.4.2 — Windows x64 test sürümü
+CHAOS LAUNCHER v0.4.4 — Windows x64 test sürümü
 Geliştirici: YσZSHI帝 / @y0zshhiii
 
 TEST
@@ -12,7 +12,7 @@ GÜNCELLEMELER (geliştirici yapılandırması)
 - Resmi güncelleme deposu: https://github.com/y0zssh111/Chaos-Launcher. Yayınlar yüklenene kadar güncelleme bulunmaz.
 - Resmi depo kaynak kodunda sabitlenmiştir. Dağıtım sırasında bu adresi değiştirmeyin.
 - GitHub Releases içinde launcher-v0.5.0 tag'li normal release'e TikTokChaosLauncher.exe adlı dosyayı yükleyin. Mod için mod-v1.2.37 gibi ayrı release ve tiktokchaos.jar adlı dosya yükleyin. JAR içindeki fabric.mod.json id=tiktokchaos ve version=1.2.37 olmalı. Sürüm numaraları örnektir. GitHub asset digest SHA-256 ve boyutu zorunludur. Yayınlar ilk 100 release içinden kontrol edilir.
-- Uygulama açılışta otomatik kontrol eder, Güncellemeler sayfasında gösterir; yükleme kullanıcının onayıyla başlar. EXE yanında eski sürüm .backup-* adıyla tutulur, EXE değişimi ayrı yardımcı süreçte yapılır; mod eski JAR'ları mod-backups altında yedekler. Başka modlar veya dünyalar güncellenmez. EXE yedeğini elle geri yüklemek mümkündür. Otomatik sağlık kontrolü ve kriptografik yayıncı imzası henüz yoktur. Windows güncelleme süreci canlı test edilmedi.
+- Uygulama açılışta otomatik kontrol eder, Güncellemeler sayfasında gösterir; yükleme kullanıcının onayıyla başlar. EXE değişimi gizli geçici klasörde ayrı yardımcı süreçle yapılır. Eski EXE kapanana kadar beklenir, aynı dosya yolu korunur, yeni pencere normal açılır ve yardımcı dosyalar yeni sürüm açıldığında temizlenir; mod eski JAR'ları mod-backups altında yedekler. Başka modlar veya dünyalar güncellenmez. Yeni süreç başlatılamazsa eski EXE geri yüklenir. Önceki sürümlerin bıraktığı klasörler otomatik silinmez. Otomatik sağlık kontrolü ve kriptografik yayıncı imzası henüz yoktur. Windows güncelleme süreci canlı test edilmedi.
 - Prism güncellemeleri bu sürümde otomatik değiştirilmez; ilk kurulum resmi en son stabil portable sürümünü kullanır. Resmi Prism ayrı, değiştirilmemiş uygulamadır. https://github.com/PrismLauncher/PrismLauncher (GPL-3.0; kendi lisansı ve kaynak kodu burada). https://prismlauncher.org/wiki/getting-started/command-line-interface/
 
 YAYINCI

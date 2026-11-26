@@ -2,7 +2,9 @@
 
 Minecraft Java Edition için TikTok Chaos launcher projesi. Geliştirici: YσZSHI帝 ([@y0zshhiii](https://www.tiktok.com/@y0zshhiii)).
 
-## Test sürümü v0.4.2
+## Test sürümü v0.4.4
+
+Bu sürüm güncelleyici onarımıdır. Bir kez eski EXE yerine elle kopyalanmalıdır; yeni güncelleyici sonraki sürümlerde devreye girer. Geçici yardımcı dosyalar yeni sürüm başarılı şekilde açıldıktan sonra temizlenir.
 
 - Minecraft 1.21.11, Fabric 0.20.1 ve Java 21.
 - Resmi, ayrı Prism Launcher üzerinden Microsoft hesabı bağlantısı ve oyun başlatma.
@@ -23,7 +25,7 @@ Windows üzerinde gerçek hesap bağlantısı ve güncelleme akışı henüz uç
 
 ## Yayınlama
 
-GitHub Releases üzerinde `launcher-v0.4.2` gibi etiketle normal release oluşturun; EXE adı `TikTokChaosLauncher.exe` olmalıdır. Mod için `mod-vX.Y.Z` ve `tiktokchaos.jar`. GitHub SHA-256 asset digest gereklidir. Test sürümleri normal release olarak yayınlanırsa istemciler tarafından güncelleme olarak görülebilir.
+GitHub Releases üzerinde `launcher-v0.4.4` gibi etiketle normal release oluşturun; EXE adı `TikTokChaosLauncher.exe` olmalıdır. Mod için `mod-vX.Y.Z` ve `tiktokchaos.jar`. GitHub SHA-256 asset digest gereklidir. Test sürümleri normal release olarak yayınlanırsa istemciler tarafından güncelleme olarak görülebilir.
 
 ## Lisans
 

@@ -24,7 +24,7 @@ import (
 
 const mcVersion = "1.21.11"
 const fabricVersion = "0.20.1"
-const launcherVersion = "0.4.2"
+const launcherVersion = "0.4.4"
 
 var client = &http.Client{Timeout: 90 * time.Second}
 
