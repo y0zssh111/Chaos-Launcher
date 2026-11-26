@@ -1,0 +1,90 @@
+name: Chaos Launcher Build & Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Release olarak yayinla (yalnizca yeni surum)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: chaos-launcher-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: Surum numarasini oku
+        id: version
+        shell: bash
+        run: |
+          version=$(tr -d '\r' < core.go | sed -nE 's/^const launcherVersion = "([0-9]+\.[0-9]+\.[0-9]+)"$/\1/p')
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo 'core.go launcherVersion gecersiz'; exit 1; }
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - name: Kod testleri
+        run: go test -count=1 ./...
+      - name: Windows 64-bit EXE derle
+        env:
+          GOOS: windows
+          GOARCH: amd64
+          CGO_ENABLED: '0'
+        run: |
+          mkdir -p dist
+          go build -trimpath -ldflags='-H windowsgui -s -w' -o dist/TikTokChaosLauncher.exe .
+          cd dist
+          sha256sum TikTokChaosLauncher.exe > TikTokChaosLauncher.exe.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chaos-launcher-${{ steps.version.outputs.version }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    if: github.event_name == 'workflow_dispatch' && inputs.publish == true && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: chaos-launcher-${{ needs.build.outputs.version }}
+          path: dist
+      - name: Dosyayi dogrula ve Release yayinla
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.build.outputs.version }}
+        shell: bash
+        run: |
+          tag="launcher-v$VERSION"
+          (cd dist && sha256sum -c TikTokChaosLauncher.exe.sha256)
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Bu surum zaten yayinlanmis: $tag. core.go icindeki launcherVersion degerini artirin."
+            exit 1
+          fi
+          gh release create "$tag" \
+            dist/TikTokChaosLauncher.exe dist/TikTokChaosLauncher.exe.sha256 \
+            --target "$GITHUB_SHA" \
+            --title "Chaos Launcher v$VERSION" \
+            --notes "Windows 64-bit otomatik derleme. Kaynak commit: $GITHUB_SHA" \
+            --latest
