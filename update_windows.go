@@ -14,12 +14,19 @@ import (
 )
 
 // Inspect only local processes; never stop them or persist their command lines.
-func chaosProcesses(root string) (bool, bool, error) {
+func scanChaosProcesses() ([]byte, error) {
 	cmd := exec.Command(filepath.Join(os.Getenv("SystemRoot"), "System32", "WindowsPowerShell", "v1.0", "powershell.exe"), "-NoProfile", "-NonInteractive", "-Command", `$ErrorActionPreference='Stop'; [Console]::OutputEncoding=[System.Text.Encoding]::UTF8; @(Get-CimInstance Win32_Process -Filter "Name='prismlauncher.exe' OR Name='java.exe' OR Name='javaw.exe'" | Select-Object Name,ExecutablePath,CommandLine,ProcessId,ParentProcessId) | ConvertTo-Json -Compress`)
 	configureProcess(cmd)
 	b, e := cmd.Output()
 	if e != nil {
-		return false, false, fmt.Errorf("Chaos oturum kontrolü başarısız: %w", e)
+		return nil, fmt.Errorf("Chaos oturum kontrolü başarısız: %w", e)
+	}
+	return b, nil
+}
+func chaosProcesses(root string) (bool, bool, error) {
+	b, e := scanChaosProcesses()
+	if e != nil {
+		return false, false, e
 	}
 	return classifyProcesses(root, b)
 }

@@ -2,9 +2,13 @@
 
 Minecraft Java Edition için TikTok Chaos launcher projesi. Geliştirici: YσZSHI帝 ([@y0zshhiii](https://www.tiktok.com/@y0zshhiii)).
 
-## Test sürümü v0.4.5
+## Test sürümü v0.4.6
 
-Bu sürüm v0.4.4 güncelleyicisini sınamak için hazırlanmıştır. v0.4.4 içinden güncelleme yapın; v0.4.5 EXE dosyasını elle başlatmayın.
+Bu sürüm Prism oturum açma penceresinin görünür açılmasını ve Windows bildirim alanı desteğini ekler.
+
+- Hesabım > Microsoft ile giriş, resmi Prism penceresini normal modda açar. Mevcut Prism penceresini öne getirmeyi dener. Hesap ekleme ve lisans doğrulama Prism tarafından yapılır.
+- Minecraft GLFW penceresi bu Chaos oturumuna ait olarak algılanırsa launcher bildirim alanına küçülür. X de boşta iken küçültür; simgeye tıklama pencereyi açar, sağ tık > Çıkış launcher işlemini sonlandırır.
+- Oyun algılama yalnızca başlatma isteği sonrasında en fazla 15 dakika, 5 saniye aralıklarla yapılır; sürekli oyun taraması yoktur. Windows uçtan uca testi gereklidir.
 
 - Minecraft 1.21.11, Fabric 0.20.1 ve Java 21.
 - Resmi, ayrı Prism Launcher üzerinden Microsoft hesabı bağlantısı ve oyun başlatma.
@@ -25,7 +29,7 @@ Windows üzerinde gerçek hesap bağlantısı ve güncelleme akışı henüz uç
 
 ## Yayınlama
 
-GitHub Releases üzerinde `launcher-v0.4.5` gibi etiketle normal release oluşturun; EXE adı `TikTokChaosLauncher.exe` olmalıdır. Mod için `mod-vX.Y.Z` ve `tiktokchaos.jar`. GitHub SHA-256 asset digest gereklidir. Test sürümleri normal release olarak yayınlanırsa istemciler tarafından güncelleme olarak görülebilir.
+GitHub Releases üzerinde `launcher-v0.4.6` gibi etiketle normal release oluşturun; EXE adı `TikTokChaosLauncher.exe` olmalıdır. Mod için `mod-vX.Y.Z` ve `tiktokchaos.jar`. GitHub SHA-256 asset digest gereklidir. Test sürümleri normal release olarak yayınlanırsa istemciler tarafından güncelleme olarak görülebilir.
 
 ## Lisans
 

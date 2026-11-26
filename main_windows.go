@@ -524,13 +524,13 @@ func command(id int) {
 		}
 		c := cfg
 		work(func() error {
-			return runPrism(root, c, true, status)
+			if e := runPrism(root, c, true, status); e != nil {
+				return e
+			}
+			ui(beginGameWatch)
+			return nil
 		})
 	case 2, 3, 7:
-		if e := save(); e != nil {
-			message(e.Error())
-			return
-		}
 		c := cfg
 		work(func() error { return runPrism(root, c, false, status) })
 	case 14:
@@ -611,7 +611,16 @@ func command(id int) {
 	}
 }
 func wnd(h uintptr, m uint32, w, l uintptr) uintptr {
+	if trayTaskbarMessage != 0 && m == trayTaskbarMessage {
+		if trayWanted {
+			addTray()
+		}
+		return 0
+	}
 	switch m {
+	case wmTray:
+		handleTray(l)
+		return 0
 	case 0x111:
 		if w>>16 == 0 {
 			command(int(w & 0xffff))
@@ -665,9 +674,13 @@ func wnd(h uintptr, m uint32, w, l uintptr) uintptr {
 				return 0
 			}
 		}
+		if !busy && hideToTray() {
+			return 0
+		}
 		u.NewProc("DestroyWindow").Call(h)
 		return 0
 	case 2:
+		removeTray()
 		u.NewProc("PostQuitMessage").Call(0)
 		return 0
 	}
@@ -723,6 +736,7 @@ func main() {
 		return
 	}
 	finishUpdateCleanup()
+	initTray()
 	dark := int32(1)
 	dwm := syscall.NewLazyDLL("dwmapi.dll").NewProc("DwmSetWindowAttribute")
 	if dwm.Find() == nil {
@@ -755,7 +769,7 @@ func main() {
 	label("OYUN PROFİLİ", 244, 394, 326, 20, tiny, accent)
 	label("Minecraft Java Edition", 244, 423, 325, 26, medium, white)
 	label("Fabric  •  Java 21  •  Ayrı oyun klasörü", 244, 456, 326, 22, small, muted)
-	label("Prism altyapısı otomatik indirilir.", 244, 487, 326, 22, small, white)
+	label("Oyun açılınca bildirim alanına küçülür.", 244, 487, 326, 22, small, white)
 	label("YAYIN", 628, 394, 326, 20, tiny, accent)
 	label("TikTok Chaos", 628, 423, 326, 26, medium, white)
 	label("Yayın bağlantısı mod üzerinden çalışır.", 628, 456, 326, 22, small, muted)
@@ -769,7 +783,7 @@ func main() {
 	button(3, "Microsoft ile giriş", 250, 247, 240, 44)
 	button(7, "Hesapları yönet", 505, 247, 200, 44)
 	codeH = label("İlk girişte Prism açılır. Hesaplar > Microsoft hesabı ekle.", 250, 319, 680, 50, normal, white)
-	label("Giriş bitince Chaos üzerinden OYNA’ya basın. Prism açık kalabilir.", 250, 380, 680, 45, normal, muted)
+	label("Prism’de hesabınızı ekleyin; sonra Chaos üzerinden OYNA’ya basın.", 250, 380, 680, 45, normal, muted)
 	label("Oyuncuların Client ID girmesine gerek yok.", 250, 438, 680, 26, small, muted)
 	label("Şifre yalnızca Microsoft’un resmi giriş sayfasına yazılır.", 250, 471, 680, 26, small, muted)
 	page(2, bgBrush)

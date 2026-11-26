@@ -26,3 +26,9 @@ func TestOrphanJava(t *testing.T) {
 		t.Fatal(p, g, e)
 	}
 }
+func TestVisibleGameWindowScope(t *testing.T) {
+	data := []byte(`[{"Name":"prismlauncher.exe","ExecutablePath":"C:\\Chaos\\prism-runtime\\prismlauncher.exe","ProcessId":2},{"Name":"javaw.exe","ExecutablePath":"C:\\Java\\javaw.exe","ParentProcessId":2,"ProcessId":3},{"Name":"javaw.exe","ExecutablePath":"C:\\Other\\javaw.exe","ProcessId":4}]`)
+	if !ownsGameWindow(`C:\Chaos`, data, map[int]bool{3: true}) || ownsGameWindow(`C:\Chaos`, data, map[int]bool{4: true}) || ownsGameWindow(`C:\Chaos`, data, nil) {
+		t.Fatal("incorrect window ownership")
+	}
+}

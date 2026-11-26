@@ -89,3 +89,14 @@ func TestModBackup(t *testing.T) {
 		t.Fatal(b)
 	}
 }
+func TestPrismImmediateExit(t *testing.T) {
+	done := make(chan error, 1)
+	done <- os.ErrPermission
+	if e := prismStartupResult(done); e != os.ErrPermission {
+		t.Fatal(e)
+	}
+	done <- nil
+	if e := prismStartupResult(done); e != nil {
+		t.Fatal(e)
+	}
+}

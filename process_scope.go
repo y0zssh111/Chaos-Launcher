@@ -13,20 +13,27 @@ type localProcess struct {
 }
 
 func normWin(s string) string { return strings.ToLower(strings.ReplaceAll(s, "/", `\`)) }
-func classifyProcesses(root string, data []byte) (bool, bool, error) {
+func decodeProcesses(data []byte) ([]localProcess, error) {
 	data = bytes.TrimSpace(bytes.TrimPrefix(data, []byte{0xef, 0xbb, 0xbf}))
 	if len(data) == 0 || string(data) == "null" {
-		return false, false, nil
+		return nil, nil
 	}
 	var ps []localProcess
 	if data[0] == '{' {
 		var p localProcess
 		if e := json.Unmarshal(data, &p); e != nil {
-			return false, false, e
+			return nil, e
 		}
 		ps = append(ps, p)
 	} else if e := json.Unmarshal(data, &ps); e != nil {
-		return false, false, fmt.Errorf("Chaos süreç bilgisi okunamadı: %w", e)
+		return nil, fmt.Errorf("Chaos süreç bilgisi okunamadı: %w", e)
+	}
+	return ps, nil
+}
+func classifyProcesses(root string, data []byte) (bool, bool, error) {
+	ps, e := decodeProcesses(data)
+	if e != nil {
+		return false, false, e
 	}
 	r := strings.TrimRight(normWin(root), `\`) + `\`
 	prismIDs := map[int]bool{}
@@ -43,4 +50,28 @@ func classifyProcesses(root string, data []byte) (bool, bool, error) {
 		}
 	}
 	return len(prismIDs) > 0, false, nil
+}
+
+// A real visible GLFW window must belong to a Java process scoped to this instance.
+func ownsGameWindow(root string, data []byte, ids map[int]bool) bool {
+	ps, e := decodeProcesses(data)
+	if e != nil {
+		return false
+	}
+	r := strings.TrimRight(normWin(root), `\`) + `\`
+	prism := map[int]bool{}
+	for _, p := range ps {
+		if strings.EqualFold(p.Name, "prismlauncher.exe") && strings.HasPrefix(normWin(p.ExecutablePath), r+`prism-runtime\`) {
+			prism[p.ProcessId] = true
+		}
+	}
+	for _, p := range ps {
+		if !ids[p.ProcessId] || !(strings.EqualFold(p.Name, "java.exe") || strings.EqualFold(p.Name, "javaw.exe")) {
+			continue
+		}
+		if prism[p.ParentProcessId] || strings.Contains(normWin(p.CommandLine), r+`prism-data\instances\tiktokchaos\`) {
+			return true
+		}
+	}
+	return false
 }

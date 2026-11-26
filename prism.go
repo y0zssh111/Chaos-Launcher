@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"time"
 )
 
 const prismRepo = "PrismLauncher/PrismLauncher"
@@ -223,15 +224,30 @@ func runPrism(root string, c Config, play bool, status func(string)) error {
 	}
 	cmd := exec.Command(p, args...)
 	cmd.Dir = filepath.Dir(p)
-	configureProcess(cmd)
+	configurePrismProcess(cmd)
 	if e = cmd.Start(); e != nil {
 		return e
 	}
-	go cmd.Wait()
+	done := make(chan error, 1)
+	go func() { done <- cmd.Wait() }()
+	if e = prismStartupResult(done); e != nil {
+		return fmt.Errorf("Prism başlatılamadı: %w", e)
+	}
 	if play {
 		status("Minecraft başlatma isteği Prism'e gönderildi. İlk açılışta indirmeler olabilir.")
 	} else {
-		status("Prism açılıyor. Hesaplar > Microsoft hesabı ekle.")
+		showPrismAccountWindow(root)
+		status("Prism penceresinde Hesaplar > Microsoft hesabı ekle. Girişten sonra Chaos’a dönün.")
 	}
 	return nil
+}
+
+// Detect immediate nonzero exits without waiting for a full GUI session.
+func prismStartupResult(done <-chan error) error {
+	select {
+	case e := <-done:
+		return e
+	case <-time.After(1500 * time.Millisecond):
+		return nil
+	}
 }

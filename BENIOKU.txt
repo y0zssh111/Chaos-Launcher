@@ -1,3 +1,5 @@
+v0.4.6: Microsoft girişinde Prism görünür çalışır; OYNA sonrasında Chaos Minecraft penceresi algılanınca bildirim alanına küçülür. Çıkmak için bildirim alanındaki mor Chaos simgesine sağ tıklayın. Windows canlı test gereklidir.
+
 CHAOS LAUNCHER v0.4.5 — Windows x64 test sürümü
 Geliştirici: YσZSHI帝 / @y0zshhiii
 
